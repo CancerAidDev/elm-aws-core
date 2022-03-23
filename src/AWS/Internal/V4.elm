@@ -191,7 +191,7 @@ authorization creds date service req rawHeaders =
             canonical service.signer req.method req.path filteredHeaders req.query req.body
 
         scope =
-            credentialScope date creds service
+            credentialScope date service
     in
     [ "AWS4-HMAC-SHA256 Credential="
         ++ creds.accessKeyId
@@ -205,11 +205,11 @@ authorization creds date service req rawHeaders =
         |> String.join ", "
 
 
-credentialScope : Posix -> Credentials -> Service -> String
-credentialScope date creds service =
+credentialScope : Posix -> Service -> String
+credentialScope date service =
     [ date |> formatPosix |> String.slice 0 8
     , Service.region service
-    , service.endpointPrefix
+    , service.signingName |> Maybe.withDefault service.endpointPrefix
     , "aws4_request"
     ]
         |> String.join "/"
@@ -229,7 +229,7 @@ signature creds service date toSign =
         |> Bytes.fromUTF8
         |> digest (formatPosix date |> String.slice 0 8)
         |> digest (Service.region service)
-        |> digest service.endpointPrefix
+        |> digest (service.signingName |> Maybe.withDefault service.endpointPrefix)
         |> digest "aws4_request"
         |> digest toSign
         |> Hex.fromByteList
