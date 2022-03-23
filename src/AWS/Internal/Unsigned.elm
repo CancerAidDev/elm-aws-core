@@ -3,15 +3,14 @@ module AWS.Internal.Unsigned exposing (prepare)
 {-| Unsigned request implementation.
 -}
 
-import AWS.Internal.Body exposing (Body, explicitMimetype)
-import AWS.Internal.Canonical exposing (canonical, canonicalPayload, signedHeaders)
+import AWS.Internal.Body exposing (Body)
+import AWS.Internal.Canonical exposing (canonicalPayload)
 import AWS.Internal.Error as Error
-import AWS.Internal.Request exposing (Request, ResponseDecoder)
+import AWS.Internal.Request exposing (Request)
 import AWS.Internal.Service as Service exposing (Service)
 import AWS.Internal.UrlBuilder
 import Http
 import Iso8601
-import Json.Decode as Decode
 import Regex
 import Task exposing (Task)
 import Time exposing (Posix)
@@ -73,7 +72,7 @@ prepare service date req =
             headers service date req.body req.headers
                 |> List.map (\( key, val ) -> Http.header key val)
         , url = AWS.Internal.UrlBuilder.url service req
-        , body = AWS.Internal.Body.toHttp req.body
+        , body = AWS.Internal.Body.toHttp service req.body
         , resolver = resolver
         , timeout = Nothing
         }
@@ -96,11 +95,6 @@ headers service date body extraHeaders =
 
           else
             [ ( "Accept", Service.acceptType service ) ]
-        , if List.member "content-type" extraNames || explicitMimetype body /= Nothing then
-            []
-
-          else
-            [ ( "Content-Type", Service.contentType service ) ]
         ]
 
 
@@ -111,17 +105,3 @@ formatPosix date =
         |> Regex.replace
             (Regex.fromString "([-:]|\\.\\d{3})" |> Maybe.withDefault Regex.never)
             (\_ -> "")
-
-
-
--- Expects headersToRemove to be all lower-case
-
-
-filterHeaders : List String -> List ( String, String ) -> List ( String, String )
-filterHeaders headersToRemove headersList =
-    let
-        matches =
-            \( head, _ ) ->
-                not <| List.member (String.toLower head) headersToRemove
-    in
-    List.filter matches headersList

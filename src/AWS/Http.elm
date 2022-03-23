@@ -52,7 +52,7 @@ import AWS.Credentials exposing (Credentials)
 import AWS.Internal.Body
 import AWS.Internal.Error as Error
 import AWS.Internal.Request exposing (ErrorDecoder, Request, ResponseDecoder)
-import AWS.Internal.Service as Service exposing (Service)
+import AWS.Internal.Service exposing (Service)
 import AWS.Internal.Unsigned as Unsigned
 import AWS.Internal.V4 as V4
 import Http exposing (Metadata)
@@ -211,7 +211,7 @@ jsonBody =
     stringBody "text/html" "<html><body><h1>Hello</h1></body></html>"
 
 -}
-stringBody : MimeType -> String -> Body
+stringBody : String -> Body
 stringBody =
     AWS.Internal.Body.string
 

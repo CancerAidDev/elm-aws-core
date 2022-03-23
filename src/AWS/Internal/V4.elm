@@ -6,17 +6,16 @@ module AWS.Internal.V4 exposing (sign)
 
 -}
 
-import AWS.Credentials as Credentials exposing (Credentials)
-import AWS.Internal.Body exposing (Body, explicitMimetype)
+import AWS.Credentials exposing (Credentials)
+import AWS.Internal.Body exposing (Body)
 import AWS.Internal.Canonical exposing (canonical, canonicalPayload, signedHeaders)
 import AWS.Internal.Error as Error
-import AWS.Internal.Request exposing (Request, ResponseDecoder)
+import AWS.Internal.Request exposing (Request)
 import AWS.Internal.Service as Service exposing (Service)
 import AWS.Internal.UrlBuilder
 import Crypto.HMAC exposing (sha256)
 import Http
 import Iso8601
-import Json.Decode as Decode
 import Regex
 import Task exposing (Task)
 import Time exposing (Posix)
@@ -83,7 +82,7 @@ sign service creds date req =
                 |> addSessionToken creds
                 |> List.map (\( key, val ) -> Http.header key val)
         , url = AWS.Internal.UrlBuilder.url service req
-        , body = AWS.Internal.Body.toHttp req.body
+        , body = AWS.Internal.Body.toHttp service req.body
         , resolver = resolver
         , timeout = Nothing
         }
@@ -111,11 +110,6 @@ headers service date body extraHeaders =
 
           else
             [ ( "Accept", Service.acceptType service ) ]
-        , if List.member "content-type" extraNames || explicitMimetype body /= Nothing then
-            []
-
-          else
-            [ ( "Content-Type", Service.contentType service ) ]
         ]
 
 
