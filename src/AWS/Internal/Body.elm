@@ -15,7 +15,7 @@ import Json.Encode
 type Body
     = Empty
     | Json Json.Encode.Value
-    | String String
+    | String String String
 
 
 toHttp : Service -> Body -> Http.Body
@@ -27,8 +27,8 @@ toHttp service body =
         Json value ->
             Http.stringBody (contentType service) (Json.Encode.encode 0 value)
 
-        String val ->
-            Http.stringBody (contentType service) val
+        String mimeType val ->
+            Http.stringBody mimeType val
 
 
 toString : Body -> String
@@ -40,7 +40,7 @@ toString body =
         Empty ->
             ""
 
-        String val ->
+        String _ val ->
             val
 
 
@@ -54,6 +54,6 @@ json =
     Json
 
 
-string : String -> Body
+string : String -> String -> Body
 string =
     String

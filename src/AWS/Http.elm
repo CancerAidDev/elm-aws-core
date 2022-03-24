@@ -211,7 +211,7 @@ jsonBody =
     stringBody "text/html" "<html><body><h1>Hello</h1></body></html>"
 
 -}
-stringBody : String -> Body
+stringBody : MimeType -> String -> Body
 stringBody =
     AWS.Internal.Body.string
 
