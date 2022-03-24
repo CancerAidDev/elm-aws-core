@@ -1,0 +1,16 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mpizenberg/elm-tooling-action@v1.2
+      - run: elm-format --validate .
+      - run: elm make
