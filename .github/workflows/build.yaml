@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build:
@@ -12,5 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: mpizenberg/elm-tooling-action@v1.2
+        with:
+          cache-key: elm-home-${{ hashFiles('elm-tooling.json', 'elm.json') }}
       - run: elm-format --validate .
       - run: elm make
