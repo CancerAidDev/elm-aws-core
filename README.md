@@ -1,50 +1,9 @@
-**Contacts for Support**
-- @rupertlssmith on https://elmlang.slack.com
-- @rupert on https://discourse.elm-lang.org
-
-**Status**
-
-- 09-May-2021 - Published as version 9.0.0
-
-The PATCH HttpMethod was added.
-
-- 25-Aug-2020 - Published as version 8.1.0
-
-The model for AWS service specs and JSON codecs for it were added.
-
-- 17-Aug-2020 - Published as version 8.0.0
-
-Error handling has been implemented. A separate error decoder can be specified
-when building a request. There are ready implemented ones for the standard error
-format, and for the case where no application level error is expected.
-
-- 11-May-2020 - Published as version 6.0.0
-
-The API has been redesigned. The intermediate `.Core.` module name has been
-removed. The old `Encode` and `Decode` modules were dropped as not very useful
-and poorly designed.
-
-A new `KVEncode` module has been introduced to help with building headers and
-query parameters. A `KVDecoder` module has been introduced to help decoding
-response headers, it is simpler than `KVEncode` as less elaborate encoding
-schemes are needed.
-
-AWS URI encoding was taken from the old `Encode` module and put in its own `Uri`
-module.
-
-`ServiceConfig` and `Credentials` were made into type aliases instead of opaque
-custom types. This mean the accessor functions could be dropped. I don't see
-any reason to make these things opaque, there is no advantage in hiding
-the implementation.
-
-`Service` building was rationalized to remove some oddities. The `ServiceConfig`
-is now a simple record and easy to understand. The defaulting is explained in
-the docs. The defaulting happens behind the scenes when turning a config into a
-`Service`.
-
-An amount of unused code was deleted. The API is now leaner and cleaner.
-
 # elm-aws-core
+
+**This is a Fork** from [the-sett/elm-aws-core](https://github.com/the-sett/elm-aws-core).
+It fixes the handling of `signingName` and `"Content-Type"` for `REST_JSON` requests.
+
+---
 
 This package provides the functionality needed to make HTTP requests to AWS
 services.
