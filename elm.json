@@ -1,7 +1,7 @@
 {
     "type": "package",
-    "name": "the-sett/elm-aws-core",
-    "summary": "Make authenticated REST requests to AWS services.",
+    "name": "canceraiddev/elm-aws-core",
+    "summary": "Fork of the-sett/elm-aws-core",
     "license": "Apache-2.0",
     "version": "9.0.0",
     "exposed-modules": [
