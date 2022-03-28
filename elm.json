@@ -3,7 +3,7 @@
     "name": "canceraiddev/elm-aws-core",
     "summary": "Fork of the-sett/elm-aws-core",
     "license": "Apache-2.0",
-    "version": "9.0.0",
+    "version": "1.0.0",
     "exposed-modules": [
         "AWS.Credentials",
         "AWS.Http",
